@@ -2,10 +2,7 @@ import requests
 import execjs
 from urllib.parse import urlencode
 from requests import Session
-"""
-获取作者主页作品链接，以https://www.toutiao.com/c/user/token/MS4wLjABAAAAeBjKNda8D5UNXcu07nCT0uIG9AUU8g38juNhhDcyrgZwzhk3Yn6LHDdTECWL6CeM/
-为例。
-"""
+
 SESSION = Session()
 
 
@@ -37,19 +34,14 @@ class Toutiao:
             "visit_user_token": self.user_token,
             "max_behot_time": self.last_max_hot_time,
         }
-        # https://www.toutiao.com/api/pc/feed/?category=profile_all&utm_source=toutiao&visit_user_token=MS4wLjABAAAAeBjKNda8D5UNXcu07nCT0uIG9AUU8g38juNhhDcyrgZwzhk3Yn6LHDdTECWL6CeM&max_behot_time=1588854165000
-        # https://www.toutiao.com/api/pc/feed/?category=profile_all&utm_source=toutiao&visit_user_token=MS4wLjABAAAAeBjKNda8D5UNXcu07nCT0uIG9AUU8g38juNhhDcyrgZwzhk3Yn6LHDdTECWL6CeM&max_behot_time=0
-
-        # _signature: _02B4Z6wo00d01Y7KLgAAAIBAw4T8W6rUfX2OzyqAADwF64
-
         current_url = url + urlencode(params)
         signature = self.js_runtime_context_sign.call("sign", current_url, "")
         params.update({"_signature": signature})
         # print(current_url)
         # print(signature)
-        r = SESSION.get(url, params=params, headers=self.headers,proxies={
-            "http":None,
-            "https":None
+        r = SESSION.get(url, params=params, headers=self.headers, proxies={
+            "http": None,
+            "https": None
         })
         print(r.text)
         data = r.json()
@@ -76,4 +68,3 @@ toutiao.next_page()
 toutiao.next_page()
 # for i in range(0, 10):
 #     toutiao.next_page()
-
